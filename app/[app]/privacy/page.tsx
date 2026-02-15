@@ -47,74 +47,101 @@ export default async function PrivacyPage({ params }: PageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-white">
-            <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 md:px-8 md:py-16 lg:px-12">
-                <ReactMarkdown
-                    components={{
-                        h1: ({ children }) => (
-                            <h1 className="mb-6 text-3xl font-bold leading-tight text-gray-900 sm:text-4xl md:mb-8">
-                                {children}
-                            </h1>
-                        ),
-                        h2: ({ children }) => (
-                            <h2 className="mb-4 mt-10 text-xl font-bold leading-snug text-gray-900 sm:text-2xl md:mb-5 md:mt-12">
-                                {children}
-                            </h2>
-                        ),
-                        h3: ({ children }) => (
-                            <h3 className="mb-3 mt-6 text-lg font-semibold leading-snug text-gray-800 sm:text-xl md:mb-4 md:mt-8">
-                                {children}
-                            </h3>
-                        ),
-                        p: ({ children }) => (
-                            <p className="mb-4 text-base leading-relaxed text-gray-800 sm:leading-loose md:mb-5">
-                                {children}
+        <div className="min-h-screen bg-slate-50">
+            {/* Header */}
+            <div className="border-b border-slate-200 bg-white">
+                <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+                    <h1 className="text-2xl font-bold text-slate-900">{app.name}</h1>
+                    <p className="mt-1 text-sm text-slate-600">Privacy Policy</p>
+                </div>
+            </div>
+
+            {/* Content */}
+            <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+                <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-12">
+                    <ReactMarkdown
+                        components={{
+                            h1: ({ children }) => (
+                                <h1 className="mb-6 text-3xl font-bold tracking-tight text-slate-900">
+                                    {children}
+                                </h1>
+                            ),
+                            h2: ({ children }) => (
+                                <h2 className="mb-4 mt-8 text-2xl font-semibold tracking-tight text-slate-900">
+                                    {children}
+                                </h2>
+                            ),
+                            h3: ({ children }) => (
+                                <h3 className="mb-3 mt-6 text-xl font-semibold text-slate-900">
+                                    {children}
+                                </h3>
+                            ),
+                            p: ({ children }) => (
+                                <p className="mb-4 text-base leading-7 text-slate-700">
+                                    {children}
+                                </p>
+                            ),
+                            ul: ({ children }) => (
+                                <ul className="mb-6 ml-6 list-disc space-y-2">{children}</ul>
+                            ),
+                            ol: ({ children }) => (
+                                <ol className="mb-6 ml-6 list-decimal space-y-2">{children}</ol>
+                            ),
+                            li: ({ children }) => (
+                                <li className="text-base leading-7 text-slate-700">
+                                    {children}
+                                </li>
+                            ),
+                            strong: ({ children }) => (
+                                <strong className="font-semibold text-slate-900">{children}</strong>
+                            ),
+                            em: ({ children }) => (
+                                <em className="italic text-slate-700">{children}</em>
+                            ),
+                            a: ({ href, children }) => (
+                                <a
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-blue-600 underline decoration-blue-600/30 underline-offset-2 transition-colors hover:text-blue-700"
+                                >
+                                    {children}
+                                </a>
+                            ),
+                            blockquote: ({ children }) => (
+                                <blockquote className="my-6 border-l-2 border-slate-300 pl-6 italic text-slate-700">
+                                    {children}
+                                </blockquote>
+                            ),
+                            code: ({ children }) => (
+                                <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-sm text-slate-900">
+                                    {children}
+                                </code>
+                            ),
+                            hr: () => (
+                                <hr className="my-8 border-t border-slate-200" />
+                            ),
+                        }}
+                    >
+                        {app.customContent}
+                    </ReactMarkdown>
+
+                    {/* Footer */}
+                    <div className="mt-12 border-t border-slate-200 pt-6">
+                        <div className="flex flex-col gap-2 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                            <p>
+                                Last updated: {new Date(app.lastUpdated).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                })}
                             </p>
-                        ),
-                        ul: ({ children }) => (
-                            <ul className="mb-5 space-y-2 md:mb-6">{children}</ul>
-                        ),
-                        ol: ({ children }) => (
-                            <ol className="mb-5 space-y-2 md:mb-6">{children}</ol>
-                        ),
-                        li: ({ children }) => (
-                            <li className="ml-5 list-disc text-base leading-relaxed text-gray-800 sm:ml-6 sm:leading-loose">
-                                {children}
-                            </li>
-                        ),
-                        strong: ({ children }) => (
-                            <strong className="font-bold text-gray-900">{children}</strong>
-                        ),
-                        em: ({ children }) => (
-                            <em className="italic text-gray-700">{children}</em>
-                        ),
-                        a: ({ href, children }) => (
-                            <a
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-medium text-blue-600 underline decoration-2 underline-offset-2 transition-colors hover:text-blue-700"
-                            >
-                                {children}
-                            </a>
-                        ),
-                        blockquote: ({ children }) => (
-                            <blockquote className="my-6 border-l-4 border-blue-500 bg-blue-50 py-3 pl-4 pr-3 italic text-gray-800 sm:pl-5 sm:pr-4 md:my-8">
-                                {children}
-                            </blockquote>
-                        ),
-                        code: ({ children }) => (
-                            <code className="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-mono text-gray-800">
-                                {children}
-                            </code>
-                        ),
-                        hr: () => (
-                            <hr className="my-8 border-t border-gray-300 md:my-10" />
-                        ),
-                    }}
-                >
-                    {app.customContent}
-                </ReactMarkdown>
+                            <p>
+                                Contact: <a href={`mailto:${app.email}`} className="text-blue-600 hover:text-blue-700">{app.email}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
