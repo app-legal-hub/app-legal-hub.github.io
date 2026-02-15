@@ -1,186 +1,314 @@
-# Legal Hub - Multi-App Privacy Policy Platform
+# Legal Documents Hub
 
-> A production-ready Next.js static site for hosting privacy policies for multiple mobile applications.
+A modern, static Next.js website for hosting privacy policies and legal documents for multiple applications. Built with shadcn/ui design principles and deployed to GitHub Pages.
 
 ## 🚀 Features
 
-- ✅ **Fully Static**: Exports to pure HTML/CSS/JS - perfect for GitHub Pages
-- ✅ **Zero Code Changes**: Add new apps by simply adding a JSON file
-- ✅ **SEO Optimized**: Dynamic metadata generation for each privacy policy
-- ✅ **Type Safe**: Full TypeScript support with strict typing
-- ✅ **Responsive Design**: Beautiful, modern UI that works on all devices
-- ✅ **Fast Build**: Static generation at build time using Next.js App Router
+- ✅ **Modern UI**: Clean, professional design inspired by shadcn/ui
+- ✅ **Fully Static**: Zero backend, pure HTML/CSS/JS exported for GitHub Pages
+- ✅ **Markdown-Based**: Write policies in Markdown with frontmatter
+- ✅ **Copy to Clipboard**: Easy link sharing for each document
+- ✅ **SEO Optimized**: Dynamic metadata generation for each page
+- ✅ **Responsive**: Works beautifully on mobile, tablet, and desktop
+- ✅ **Type Safe**: Full TypeScript support
 
 ## 📋 Tech Stack
 
-- Next.js 16 (App Router)
-- TypeScript 5
-- TailwindCSS 4
-- Static Export (`output: 'export'`)
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript 5
+- **Styling**: TailwindCSS 4
+- **Markdown**: react-markdown + gray-matter
+- **Deployment**: GitHub Pages (Static Export)
 
 ## 🏗️ Project Structure
 
 ```
 app-legal-hub/
 ├── app/
-│   ├── page.tsx                # Home page listing all apps
-│   └── [app]/privacy/page.tsx  # Dynamic privacy policy page
-├── data/
-│   ├── fitness-app.json        # Privacy data for Fitness app
-│   └── tabugame.json           # Privacy data for Tabu game
+│   ├── page.tsx                    # Homepage with app cards
+│   ├── [app]/privacy/page.tsx      # Privacy policy page
+│   └── components/
+│       └── CopyButton.tsx          # Clipboard copy component
+├── data/privacy/
+│   ├── tabugame.md                 # Tabu Game privacy policy
+│   └── fitness-app.md              # Fitness App privacy policy
 ├── lib/
-│   ├── types.ts                # TypeScript type definitions
-│   └── loadApps.ts             # Data loading utilities
-└── next.config.ts              # Next.js configuration
+│   ├── types.ts                    # TypeScript definitions
+│   └── loadApps.ts                 # Data loading utilities
+└── .github/workflows/
+    └── nextjs.yml                  # Auto-deploy to GitHub Pages
 ```
 
 ## 🎯 Quick Start
 
-### Installation
+### 1. Installation
 
 ```bash
 npm install
 ```
 
-### Development
+### 2. Development
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the result.
+Visit [http://localhost:3000](http://localhost:3000)
 
-### Production Build
+### 3. Production Build
 
 ```bash
 npm run build
 ```
 
-Static files will be generated in the `/out` directory.
+Static files will be in the `out/` directory.
 
-## ➕ Adding a New App
+## ➕ Adding a New App & Privacy Policy
 
-Adding a new application is incredibly simple - **no code changes required**!
+### Step-by-Step Guide
 
-1. Create a new JSON file in the `/data` directory (e.g., `my-app.json`)
-2. Use this structure:
+#### 1. Create a Markdown File
 
-```json
-{
-  "slug": "my-app",
-  "name": "My App Name",
-  "lastUpdated": "2026-02-13",
-  "email": "privacy@myapp.com",
-  "dataCollected": [
-    "Example data point 1",
-    "Example data point 2"
-  ],
-  "thirdParties": [
-    {
-      "name": "Service Name",
-      "purpose": "What it's used for",
-      "privacyPolicyUrl": "https://example.com/privacy"
-    }
-  ],
-  "retentionPolicy": "How long you keep the data and deletion policy."
-}
+Create a new file in `data/privacy/` with your app's slug as the filename:
+
+```bash
+touch data/privacy/my-app.md
 ```
 
-3. Run `npm run build` - your new app is automatically included!
+#### 2. Add Frontmatter and Content
 
-## 📝 JSON Schema
+Open the file and add YAML frontmatter at the top, followed by your privacy policy in Markdown:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `slug` | string | URL-friendly identifier (e.g., "my-app") |
-| `name` | string | Display name of the application |
-| `lastUpdated` | string | Last update date (YYYY-MM-DD) |
-| `email` | string | Contact email for privacy inquiries |
-| `dataCollected` | string[] | List of data types collected |
-| `thirdParties` | object[] | Third-party services used |
-| `retentionPolicy` | string | Data retention and deletion policy |
+```markdown
+---
+slug: my-app
+name: My App Name
+email: support@myapp.com
+lastUpdated: 2026-02-15
+---
+
+# Privacy Policy
+
+Last Updated: February 15, 2026
+
+## Introduction
+
+Your app description here...
+
+## Information We Collect
+
+- User data type 1
+- User data type 2
+
+## How We Use Your Information
+
+We use the collected information to...
+
+## Third-Party Services
+
+We use the following third-party services:
+
+- **Service Name**: Purpose
+- **Another Service**: Purpose
+
+## Data Retention
+
+We retain your data for...
+
+## Contact Us
+
+If you have questions, contact us at support@myapp.com
+```
+
+#### 3. Frontmatter Fields
+
+| Field | Required | Description | Example |
+|-------|----------|-------------|---------|
+| `slug` | ✅ | URL-friendly identifier | `my-app` |
+| `name` | ✅ | Display name of the app | `My App Name` |
+| `email` | ✅ | Contact email | `support@myapp.com` |
+| `lastUpdated` | ✅ | Date in YYYY-MM-DD format | `2026-02-15` |
+
+#### 4. Test Locally
+
+```bash
+npm run dev
+```
+
+Visit:
+- Homepage: `http://localhost:3000/`
+- Your policy: `http://localhost:3000/my-app/privacy`
+
+#### 5. Build and Deploy
+
+```bash
+npm run build
+git add .
+git commit -m "Add privacy policy for My App"
+git push origin main
+```
+
+GitHub Actions will automatically deploy your changes!
+
+## 📝 Markdown Formatting
+
+You can use all standard Markdown features:
+
+### Headings
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
+```
+
+### Lists
+
+```markdown
+- Bullet point 1
+- Bullet point 2
+
+1. Number item 1
+2. Number item 2
+```
+
+### Links
+
+```markdown
+[Link text](https://example.com)
+```
+
+### Emphasis
+
+```markdown
+**Bold text**
+*Italic text*
+```
+
+### Code
+
+```markdown
+Inline `code` or:
+
+\`\`\`
+Code block
+\`\`\`
+```
 
 ## 🌐 Deployment
 
-### GitHub Pages
+### GitHub Pages (Automated)
 
-1. Push your code to a GitHub repository
-2. Go to Settings → Pages
-3. Set source to deploy from the `main` branch
-4. Your site will be available at `https://yourusername.github.io/repo-name`
+This project is configured for automatic deployment to GitHub Pages:
 
-### Other Static Hosts
+1. **Already Set Up**: The `.github/workflows/nextjs.yml` workflow handles everything
+2. **On Every Push**: Any push to `main` triggers a build and deploy
+3. **View Your Site**: `https://your-username.github.io/repo-name`
 
-The `/out` directory after build can be deployed to:
+### Manual Deployment
+
+If you want to deploy manually:
+
+```bash
+npm run build
+# Upload contents of `out/` directory to your hosting provider
+```
+
+Compatible with:
 - Vercel
-- Netlify
+- Netlify  
 - Cloudflare Pages
 - AWS S3
-- Any static file hosting service
+- Any static hosting service
 
 ## 🎨 Customization
 
-### Styling
+### Colors
 
-All pages use TailwindCSS. To customize:
-- Edit `app/globals.css` for global styles
-- Modify Tailwind classes in page components
-- Update color scheme in component files
+The project uses Tailwind's slate color palette. To change:
 
-### Layout
+Edit `app/page.tsx` and `app/[app]/privacy/page.tsx`, replacing:
+- `slate-50` → your background color
+- `slate-900` → your primary text color
+- `blue-600` → your accent color
 
-- Home page: `app/page.tsx`
-- Privacy page: `app/[app]/privacy/page.tsx`
-- Root layout: `app/layout.tsx`
+### Typography
 
-## 📊 Sample Apps Included
+Current font stack uses system fonts. To change, edit `app/layout.tsx`:
 
-The project includes two fully configured sample applications:
-
-1. **Fitness Tracker Pro** - Health and fitness app
-2. **Tabu Master** - Word guessing game app
-
-These serve as examples and can be modified or removed.
-
-## ✅ Verification
-
-Build output confirms successful static generation:
-
-```
-Route (app)
-┌ ○ /                          (Static homepage)
-├ ○ /_not-found                (404 page)
-└ ● /[app]/privacy             (Dynamic SSG routes)
-  ├ /fitness-app/privacy
-  └ /tabugame/privacy
+```tsx
+className="font-sans"  // Replace with your font
 ```
 
-## 🔒 Privacy Policy Features
+### Adding More Document Types
+
+Currently supports `privacy` pages. To add Terms of Service:
+
+1. Create `data/terms/` directory
+2. Add markdown files
+3. Create `app/[app]/terms/page.tsx` 
+4. Update `lib/loadApps.ts` with new loader function
+
+## 📊 Sample Apps
+
+Two sample applications are included:
+
+1. **Tabu Game** (`data/privacy/tabugame.md`)
+2. **Fitness App** (`data/privacy/fitness-app.md`)
+
+Feel free to modify or delete these examples.
+
+## 🔍 SEO
 
 Each privacy policy page includes:
-- App name and last updated date
-- Data collection details
-- Third-party services with links
-- Data retention policy
-- Contact information
-- Professional, clean design
+- Dynamic `<title>` tags
+- Meta descriptions
+- Open Graph tags
+- Clean, semantic HTML
+
+## 🐛 Troubleshooting
+
+### Build Fails
+
+```bash
+# Clear cache and rebuild
+rm -rf .next
+npm run build
+```
+
+### Changes Not Showing
+
+1. Hard refresh your browser (Cmd+Shift+R / Ctrl+F5)
+2. Check GitHub Actions for deployment status
+3. Verify your markdown frontmatter is valid YAML
+
+### New App Not Appearing  
+
+1. Check filename: Must be in `data/privacy/` with `.md` extension
+2. Verify frontmatter has all required fields
+3. Ensure `slug` matches filename (without `.md`)
 
 ## 📄 License
 
-This project is open source and available under the MIT License.
+MIT License - feel free to use for your projects!
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
-- Add new features
-- Improve styling
-- Report bugs
-- Suggest enhancements
+Contributions are welcome! To contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📞 Support
 
-For questions or issues, please open an issue on GitHub.
+For questions or issues:
+- Open an issue on GitHub
+- Check existing documentation
+- Review sample apps for examples
 
 ---
 
-**Built with ❤️ using Next.js**
+**Built with ❤️ using Next.js, TypeScript, and Tailwind CSS**
