@@ -15,3 +15,15 @@ export interface ThirdPartyService {
     purpose: string;
     privacyPolicyUrl?: string;
 }
+
+export interface DocumentInfo {
+    type: string; // 'privacy', 'terms', etc.
+    lastUpdated: string;
+}
+
+export interface AppWithDocuments {
+    slug: string;
+    name: string;
+    email: string;
+    documents: DocumentInfo[];
+}

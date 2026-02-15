@@ -1,10 +1,21 @@
 import Link from 'next/link';
-import { loadAllApps } from '@/lib/loadApps';
+import { loadAllAppsWithDocuments } from '@/lib/loadApps';
 import { CopyButton } from './components/CopyButton';
 
 export default async function HomePage() {
-    const apps = await loadAllApps();
+    const apps = await loadAllAppsWithDocuments();
     const baseUrl = 'https://app-legal-hub.github.io';
+
+    const getDocumentLabel = (type: string) => {
+        switch (type) {
+            case 'privacy':
+                return 'Privacy Policy';
+            case 'terms':
+                return 'Terms of Use';
+            default:
+                return type.charAt(0).toUpperCase() + type.slice(1);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -22,8 +33,6 @@ export default async function HomePage() {
                 {/* Apps Grid */}
                 <div className="grid gap-6 md:grid-cols-2">
                     {apps.map((app) => {
-                        const privacyUrl = `${baseUrl}/${app.slug}/privacy`;
-
                         return (
                             <div
                                 key={app.slug}
@@ -46,69 +55,44 @@ export default async function HomePage() {
 
                                 {/* Documents List */}
                                 <div className="p-6 space-y-2">
-                                    {/* Privacy Policy */}
-                                    <div className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100">
-                                        <Link
-                                            href={`/${app.slug}/privacy`}
-                                            className="flex flex-1 items-center gap-3 min-w-0"
+                                    {app.documents.map((doc) => (
+                                        <div
+                                            key={doc.type}
+                                            className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100"
                                         >
-                                            <svg
-                                                className="h-4 w-4 flex-shrink-0 text-slate-500"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
+                                            <Link
+                                                href={`/${app.slug}/${doc.type}`}
+                                                className="flex flex-1 items-center gap-3 min-w-0"
                                             >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                                />
-                                            </svg>
-                                            <span className="text-sm font-medium text-slate-700 hover:text-slate-900">
-                                                Privacy Policy
-                                            </span>
-                                        </Link>
-                                        <CopyButton url={privacyUrl} />
-                                    </div>
-
-                                    {/* Terms of Use */}
-                                    <div className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100">
-                                        <Link
-                                            href={`/${app.slug}/terms`}
-                                            className="flex flex-1 items-center gap-3 min-w-0"
-                                        >
-                                            <svg
-                                                className="h-4 w-4 flex-shrink-0 text-slate-500"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                                />
-                                            </svg>
-                                            <span className="text-sm font-medium text-slate-700 hover:text-slate-900">
-                                                Terms of Use
-                                            </span>
-                                        </Link>
-                                        <CopyButton url={`${baseUrl}/${app.slug}/terms`} />
-                                    </div>
-
-                                </div>
-
-                                {/* Card Footer */}
-                                <div className="border-t border-slate-100 px-6 py-4">
-                                    <p className="text-xs text-slate-500">
-                                        Last updated {new Date(app.lastUpdated).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric'
-                                        })}
-                                    </p>
+                                                <svg
+                                                    className="h-4 w-4 flex-shrink-0 text-slate-500"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                    />
+                                                </svg>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-slate-700 hover:text-slate-900">
+                                                        {getDocumentLabel(doc.type)}
+                                                    </p>
+                                                    <p className="text-xs text-slate-500">
+                                                        Updated {new Date(doc.lastUpdated).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            </Link>
+                                            <CopyButton url={`${baseUrl}/${app.slug}/${doc.type}`} />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         );

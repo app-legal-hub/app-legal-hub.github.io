@@ -1,7 +1,76 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { AppData } from './types';
+import { AppData, AppWithDocuments, DocumentInfo } from './types';
+
+/**
+ * Loads all apps with their documents and metadata
+ */
+export async function loadAllAppsWithDocuments(): Promise<AppWithDocuments[]> {
+    const dataDirectory = path.join(process.cwd(), 'data');
+
+    try {
+        const appDirs = await fs.readdir(dataDirectory);
+
+        const apps = await Promise.all(
+            appDirs.map(async (appSlug) => {
+                const appPath = path.join(dataDirectory, appSlug);
+                const stats = await fs.stat(appPath);
+
+                if (!stats.isDirectory()) return null;
+
+                // Get all markdown files in this app directory
+                const files = await fs.readdir(appPath);
+                const mdFiles = files.filter(file => file.endsWith('.md'));
+
+                // Load metadata from each document
+                const documentsRaw = await Promise.all(
+                    mdFiles.map(async (file) => {
+                        const docType = file.replace('.md', '');
+                        const filePath = path.join(appPath, file);
+
+                        try {
+                            const fileContents = await fs.readFile(filePath, 'utf8');
+                            const { data } = matter(fileContents);
+
+                            return {
+                                type: docType,
+                                lastUpdated: data.lastUpdated as string,
+                            };
+                        } catch (error) {
+                            console.error(`Error loading ${file} for ${appSlug}:`, error);
+                            return null;
+                        }
+                    })
+                );
+
+                const documents = documentsRaw.filter((doc): doc is DocumentInfo => doc !== null);
+
+                // Read privacy.md to get app name and email
+                const privacyPath = path.join(appPath, 'privacy.md');
+                try {
+                    const fileContents = await fs.readFile(privacyPath, 'utf8');
+                    const { data } = matter(fileContents);
+
+                    return {
+                        slug: data.slug as string || appSlug,
+                        name: data.name as string,
+                        email: data.email as string,
+                        documents,
+                    };
+                } catch (error) {
+                    console.error(`Error loading app ${appSlug}:`, error);
+                    return null;
+                }
+            })
+        );
+
+        return apps.filter((app): app is AppWithDocuments => app !== null);
+    } catch (error) {
+        console.error('Error loading apps:', error);
+        return [];
+    }
+}
 
 /**
  * Loads all app directories from the data folder
