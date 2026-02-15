@@ -72,19 +72,32 @@ export default async function HomePage() {
                                         <CopyButton url={privacyUrl} />
                                     </div>
 
-                                    {/* Future documents - commented out for now */}
-                                    {/* 
-                                    <div className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50 p-3 opacity-50">
-                                        <div className="flex items-center gap-3">
-                                            <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    {/* Terms of Use */}
+                                    <div className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100">
+                                        <Link
+                                            href={`/${app.slug}/terms`}
+                                            className="flex flex-1 items-center gap-3 min-w-0"
+                                        >
+                                            <svg
+                                                className="h-4 w-4 flex-shrink-0 text-slate-500"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                />
                                             </svg>
-                                            <span className="text-sm text-slate-400">
-                                                Terms of Service
+                                            <span className="text-sm font-medium text-slate-700 hover:text-slate-900">
+                                                Terms of Use
                                             </span>
-                                        </div>
+                                        </Link>
+                                        <CopyButton url={`${baseUrl}/${app.slug}/terms`} />
                                     </div>
-                                    */}
+
                                 </div>
 
                                 {/* Card Footer */}

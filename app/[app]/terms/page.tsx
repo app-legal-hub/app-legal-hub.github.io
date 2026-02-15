@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { loadDocument, loadAllApps } from '@/lib/loadApps';
 import type { Metadata } from 'next';
-import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface PageProps {
@@ -20,7 +19,7 @@ export async function generateStaticParams() {
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { app: appSlug } = await params;
-    const app = await loadDocument(appSlug, 'privacy');
+    const app = await loadDocument(appSlug, 'terms');
 
     if (!app) {
         return {
@@ -29,19 +28,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 
     return {
-        title: `${app.name} - Privacy Policy`,
-        description: `Privacy policy for ${app.name}. Learn about how we collect, use, and protect your data.`,
+        title: `${app.name} - Terms of Use`,
+        description: `Terms of use for ${app.name}. Learn about the conditions for using our application.`,
         openGraph: {
-            title: `${app.name} - Privacy Policy`,
-            description: `Privacy policy for ${app.name}`,
+            title: `${app.name} - Terms of Use`,
+            description: `Terms of use for ${app.name}`,
             type: 'website',
         },
     };
 }
 
-export default async function PrivacyPage({ params }: PageProps) {
+export default async function TermsPage({ params }: PageProps) {
     const { app: appSlug } = await params;
-    const app = await loadDocument(appSlug, 'privacy');
+    const app = await loadDocument(appSlug, 'terms');
 
     if (!app) {
         notFound();
@@ -53,7 +52,7 @@ export default async function PrivacyPage({ params }: PageProps) {
             <div className="border-b border-slate-200 bg-white">
                 <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
                     <h1 className="text-2xl font-bold text-slate-900">{app.name}</h1>
-                    <p className="mt-1 text-sm text-slate-600">Privacy Policy</p>
+                    <p className="mt-1 text-sm text-slate-600">Terms of Use</p>
                 </div>
             </div>
 
