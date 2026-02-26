@@ -12,6 +12,10 @@ export default async function HomePage() {
                 return 'Privacy Policy';
             case 'terms':
                 return 'Terms of Use';
+            case 'support':
+                return 'Support';
+            case 'marketing':
+                return 'About the App';
             default:
                 return type.charAt(0).toUpperCase() + type.slice(1);
         }
